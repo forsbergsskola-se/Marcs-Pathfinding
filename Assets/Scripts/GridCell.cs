@@ -16,6 +16,7 @@ namespace DefaultNamespace
 
         public void OnValidate()
         {
+            spriteRenderer = GetComponent<SpriteRenderer>();
             spriteRenderer.color = isWalkable ? Color.white : Color.black;
         }
     }
