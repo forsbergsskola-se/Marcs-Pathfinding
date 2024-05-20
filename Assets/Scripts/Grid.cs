@@ -10,6 +10,8 @@ public class Grid : MonoBehaviour
     public GridCell[] gridCells = new GridCell[100];
     public int width = 10;
 
+    
+    
     public GridCell GetGridCell(int x, int y)
     {
         return gridCells[y * width + x];
