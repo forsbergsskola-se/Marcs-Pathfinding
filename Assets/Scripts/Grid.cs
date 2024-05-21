@@ -14,9 +14,15 @@ public class Grid : MonoBehaviour
     
     public GridCell GetGridCell(int x, int y)
     {
+        Debug.Log(x + " " + y);
         return gridCells[y * width + x];
     }
 
+    public GridCell GetCellFromPosition(Vector3 position)
+    {
+        return GetGridCell(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y));
+    }
+    
     public bool isWalkable(int x, int y)
     {
         return GetGridCell(x, y).isWalkable;
