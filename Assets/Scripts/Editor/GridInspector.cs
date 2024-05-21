@@ -20,11 +20,13 @@ public class GridInspector : Editor
 
             if (EditorUtility.IsDirty(grid))
             {
-                foreach (var cell in grid.gridCells)
+                foreach (var cell in FindObjectsOfType<GridCell>())
                 {
                     if(cell != null)
                         DestroyImmediate(cell.gameObject);
                 }
+                
+                
             }
             
             EditorUtility.SetDirty(grid);
