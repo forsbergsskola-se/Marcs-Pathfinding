@@ -1,6 +1,7 @@
-using DefaultNamespace;
+using Grids;
 using UnityEditor;
 using UnityEngine;
+using Grid = Grids.Grid;
 
 [CustomEditor(typeof(Grid))]
 public class GridInspector : Editor

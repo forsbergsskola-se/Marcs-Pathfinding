@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace Grids
 {
     [RequireComponent(typeof(SpriteRenderer))]
     public class GridCell : MonoBehaviour
