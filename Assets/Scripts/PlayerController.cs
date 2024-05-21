@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Grids;
 using UnityEngine;
 using Grid = Grids.Grid;
@@ -19,10 +20,22 @@ public class PlayerController : MonoBehaviour
             {
                 node.spriteRenderer.color = Color.green;
             }
-            
+
+            StartCoroutine(Co_WalkPath(path));
         }
     }
 
+    IEnumerator Co_WalkPath(IEnumerable<GridCell> path)
+    {
+        foreach (var cell in path)
+        {
+            while (Vector3.Distance(transform.position, cell.transform.position) > 0.001f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, cell.transform.position, Time.deltaTime);
+                yield return null;
+            }
+        }
+    }
 
     static IEnumerable<GridCell> FindPath(Grid grid, GridCell start, GridCell end)
     {
@@ -45,7 +58,7 @@ public class PlayerController : MonoBehaviour
                 neighbour.spriteRenderer.color = Color.cyan;
                 
                 if (neighbour == end)
-                    return path;
+                    return path.Reverse();
 
                 foundNextNode = true;
                 break;
