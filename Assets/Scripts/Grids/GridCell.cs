@@ -18,7 +18,7 @@ namespace Grids
 
         public bool isWalkable => cellType != CellType.Wall;
 
-        public int Cost =>
+        public int cost =>
                 cellType switch
                 {
                     CellType.Ground => 1,
@@ -45,7 +45,13 @@ namespace Grids
         public void OnValidate()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
-            spriteRenderer.color = isWalkable ? Color.white : Color.black;
+            spriteRenderer.color = cellType switch
+            {
+                CellType.Ground => Color.white,
+                CellType.Wall => Color.black,
+                CellType.Water => Color.blue,
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
     }
 }

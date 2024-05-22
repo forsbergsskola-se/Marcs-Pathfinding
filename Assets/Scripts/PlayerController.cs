@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Collections;
 using Grids;
 using UnityEngine;
 using Grid = Grids.Grid;
@@ -104,6 +105,43 @@ public class PlayerController : MonoBehaviour
         return null;
     }
 
+    static IEnumerable<GridCell> FindPath_Dijkstra(Grid grid, GridCell start, GridCell end)
+    {
+        PriorityQueue<GridCell> todo = new();
+        HashSet<GridCell> visited = new();
+        
+        todo.Enqueue(start, 0);
+        visited.Add(start);
+        Dictionary<GridCell, int> costs = new();
+        costs[start] = 0;
+        Dictionary<GridCell, GridCell> previous = new();
+        
+        while (todo.Count > 0)
+        {
+            var current = todo.Dequeue();
+            if (current == end)
+                return TracePath(current, previous).Reverse();
+            
+            foreach (var neighbour in grid.GetWalkableNeighboursForCell(current))
+            {
+                int newNeighbourCost = costs[current] + neighbour.cost;
+                if(!costs.TryGetValue(neighbour, out int neighbourCost) && 
+                   neighbourCost <= newNeighbourCost) 
+                    continue;
+                
+                todo.Enqueue(neighbour, newNeighbourCost);
+                previous[neighbour] = current;
+                costs[neighbour] = newNeighbourCost;
+                
+                neighbour.spriteRenderer.color = Color.cyan;
+                
+            }
+
+        }
+        
+        
+        return null;
+    }
     private static IEnumerable<GridCell> TracePath(GridCell neighbour, Dictionary<GridCell, GridCell> previous)
     {
         while (true)
