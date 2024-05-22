@@ -15,10 +15,10 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             Grid grid = FindObjectOfType<Grid>();
-            var path = FindPath_BreadthFirst(grid, grid.GetCellFromPosition(transform.position), grid.GetCellFromPosition(goal.position));
+            var path = FindPath_Dijkstra(grid, grid.GetCellFromPosition(transform.position), grid.GetCellFromPosition(goal.position));
             
             foreach (var node in path)
-                node.spriteRenderer.color = Color.green;
+                node.spriteRenderer.ShiftBrightness(0.4f);
 
             StartCoroutine(Co_WalkPath(path));
         }
@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviour
             foreach (var neighbour in grid.GetWalkableNeighboursForCell(current))
             {
                 int newNeighbourCost = costs[current] + neighbour.cost;
-                if(!costs.TryGetValue(neighbour, out int neighbourCost) && 
+                if(costs.TryGetValue(neighbour, out int neighbourCost) && 
                    neighbourCost <= newNeighbourCost) 
                     continue;
                 
@@ -133,8 +133,7 @@ public class PlayerController : MonoBehaviour
                 previous[neighbour] = current;
                 costs[neighbour] = newNeighbourCost;
                 
-                neighbour.spriteRenderer.color = Color.cyan;
-                
+                neighbour.spriteRenderer.ShiftBrightness(0.4f);
             }
 
         }
@@ -152,5 +151,29 @@ public class PlayerController : MonoBehaviour
         }
         
         
+    }
+    
+    
+}
+
+public static class SpriteRendererExtensions
+{
+    public static void ShiftHue(this SpriteRenderer spriteRenderer, float hue)
+    {
+        Color.RGBToHSV(spriteRenderer.color, out var h, out var s, out var v);
+        spriteRenderer.color = Color.HSVToRGB((h + hue)%1, s, v);
+    }
+    
+    public static void ShiftBrightness(this SpriteRenderer spriteRenderer, float brightness)
+    {
+        Color.RGBToHSV(spriteRenderer.color, out var h, out var s, out var v);
+        if (v > 0.5f)
+        {
+            spriteRenderer.color = Color.HSVToRGB(h, s, (v-brightness)%1f);
+        }
+        else
+        {
+            spriteRenderer.color = Color.HSVToRGB(h, s, (v+brightness)%1f);
+        }
     }
 }
