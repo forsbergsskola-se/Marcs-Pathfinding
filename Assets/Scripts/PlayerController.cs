@@ -95,9 +95,7 @@ public class PlayerController : MonoBehaviour
                 neighbour.spriteRenderer.color = Color.cyan;
                 
                 if (neighbour == end)
-                    return BuildPath(neighbour, previous).Reverse();
-                
-                break;
+                    return TracePath(neighbour, previous).Reverse();
             }
 
         }
@@ -106,7 +104,7 @@ public class PlayerController : MonoBehaviour
         return null;
     }
 
-    private static IEnumerable<GridCell> BuildPath(GridCell neighbour, Dictionary<GridCell, GridCell> previous)
+    private static IEnumerable<GridCell> TracePath(GridCell neighbour, Dictionary<GridCell, GridCell> previous)
     {
         while (true)
         {
